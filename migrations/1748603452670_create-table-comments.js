@@ -22,8 +22,9 @@ exports.up = (pgm) => {
             onDelete: 'CASCADE',
         },
         date: {
-            type: 'TIMESTAMPTZ',
+            type: 'TEXT',
             notNull: true,
+            default: pgm.func('CURRENT_TIMESTAMP')
         },
         is_delete: {
             type: 'BOOLEAN',

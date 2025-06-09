@@ -9,13 +9,8 @@ exports.up = (pgm) => {
         body: {
             type: 'TEXT', notNull: true
         },
-        created_at: {
-            type: 'TIMESTAMPTZ',
-            notNull: true,
-            default: pgm.func('CURRENT_TIMESTAMP')
-        },
-        updated_at: {
-            type: 'TIMESTAMPTZ',
+        date: {
+            type: 'TEXT',
             notNull: true,
             default: pgm.func('CURRENT_TIMESTAMP')
         },

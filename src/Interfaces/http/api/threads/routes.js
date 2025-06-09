@@ -1,5 +1,3 @@
-const { options } = require("pg/lib/defaults.js");
-
 const routes = (handler) => ([
   {
     method: 'POST',
