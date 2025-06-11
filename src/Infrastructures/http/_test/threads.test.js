@@ -4,18 +4,19 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
 const AuthenticationTestHelper = require('../../../../tests/AuthenticationTestHelper');
+const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 
 describe('/threads endpoint', () => {
   afterAll(async () => {
     await pool.end();
   });
-  
+
   afterEach(async () => {
     await UsersTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
   });
 
-  
+
 
   describe('when POST /threads', () => {
     it('should response 401 when request missing authentication', async () => {
@@ -128,4 +129,39 @@ describe('/threads endpoint', () => {
       );
     });
   });
+
+  describe('when GET /threads/{threadId}', () => {
+    it("should response 200 and returning correct data", async () => {
+      // Arrange
+      const server = await createServer(container);
+      const { accessToken, userId } = await AuthenticationTestHelper.getAccessToken(server);
+      await ThreadsTableTestHelper.addThread({ owner: userId });
+      await CommentsTableTestHelper.addComment({ owner: userId });
+
+      // Action
+      const response = await server.inject({
+        method: 'GET',
+        url: '/threads/thread-123',
+        headers: {
+          authorization: `Bearer ${accessToken}`
+        }
+      });
+
+      // Assert
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual("success");
+      expect(responseJson.data.thread).toEqual(
+        expect.objectContaining({
+          id: 'thread-123',
+          title: 'This is thread',
+          body: 'This is body',
+          date: '2025-06-09T11:06:24.541Z',
+          username: 'JohnDoe123',
+          comments: expect.any(Array)
+        })
+      )
+
+    })
+  })
 });

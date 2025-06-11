@@ -48,8 +48,6 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     if (!result.rowCount) {
       throw new NotFoundError('thread tidak ditemukan');  
     }
-    // console.log(result.rows[0]);
-    // TODO: Gabungkan comments disini!!!
     return new DetailThread({ ...result.rows[0] });
   }
 }

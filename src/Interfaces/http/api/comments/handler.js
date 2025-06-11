@@ -11,13 +11,13 @@ class CommentsHandler {
 
   async postCommentHandler(request, h) {
     const { id } = request.auth.credentials;
+    const { threadId } = request.params;
     const addCommentUseCase = this._container.getInstance(AddCommentUseCase.name);
-    const addedComment = await addCommentUseCase.execute({...request.payload, owner: id, });
-
+    const addedComment = await addCommentUseCase.execute({thread_id: threadId, ...request.payload, owner: id, });
     const response = h.response({
       status: 'success',
       data: {
-        addedThread,
+        addedComment,
       },
     });
     response.code(201);
@@ -26,7 +26,7 @@ class CommentsHandler {
 
   async deleteCommentHandler(request, h) {
     const { id: owner } = request.auth.credentials;
-    const { threadId, commentId } = request.params;
+    const { threadId, commentId } = request.params; 
     const deleteCommentUseCase = this._container.getInstance(DeleteCommentUseCase.name);
     await deleteCommentUseCase.execute({ threadId, commentId, owner });
 
@@ -38,4 +38,4 @@ class CommentsHandler {
   }
 }
 
-module.exports = ThreadsHandler;
+module.exports = CommentsHandler;
