@@ -18,7 +18,7 @@ describe('a GetThread entities', () => {
         expect(() => new GetThread(payload)).toThrowError('GET_THREAD.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
 
-    it('should create getThread object correctly', () => {
+    it('should create GetThread object correctly', () => {
         const payload = {
             thread_id: "thread-123"
         };

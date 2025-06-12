@@ -20,7 +20,7 @@ describe('a AddComment entities', () => {
         expect(() => new AddComment(payload)).toThrowError('ADD_COMMENT.NOT_MEET_DATA_TYPE_SPECIFICATION');
     });
 
-    it('should create addComment object correctly', () => {
+    it('should create AddComment object correctly', () => {
         const payload = {
             content: 'This is a comment',
             thread_id: 'thread-123',
@@ -29,7 +29,8 @@ describe('a AddComment entities', () => {
 
         const addComment = new AddComment(payload);
 
+        expect(addComment.thread_id).toEqual(payload.thread_id);
         expect(addComment.content).toEqual(payload.content);
-        expect(addComment.threadId).toEqual(payload.threadId);
+        expect(addComment.owner).toEqual(payload.owner);
     });
 });

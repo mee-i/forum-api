@@ -2,6 +2,7 @@ const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
+const InvariantError = require('../../Commons/exceptions/InvariantError');
 
 class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
@@ -10,8 +11,8 @@ class CommentRepositoryPostgres extends CommentRepository {
     this._idGenerator = idGenerator;
   }
 
-  async addComment(addComment) {
-    const { thread_id, content, owner } = addComment;
+  async addComment(payload) {
+    const { thread_id, content, owner } = payload;
     const id = `comment-${this._idGenerator()}`;
 
     const query = {
@@ -20,7 +21,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
     const result = await this._pool.query(query);
     if (!result.rowCount) {
-      throw new NotFoundError('Komentar tidak ditemukan');
+      throw new InvariantError('Gagal menambagkan komentar');
     }
     return new AddedComment({ ...result.rows[0] });
   }
@@ -35,7 +36,6 @@ class CommentRepositoryPostgres extends CommentRepository {
         ELSE comments.content
         END AS content,
         comments.date,
-        comments.is_delete,
         users.username
       FROM comments
       JOIN users ON comments.user_id = users.id
@@ -84,7 +84,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     };
     const result = await this._pool.query(query);
     if (!result.rowCount) {
-      throw new NotFoundError('Komentar tidak ditemukan');
+      throw new InvariantError('Gagal menghapus balasan');
     }
     return result.rows;
 

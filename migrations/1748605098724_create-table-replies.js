@@ -9,6 +9,12 @@ exports.up = (pgm) => {
             type: 'TEXT',
             notNull: true,
         },
+        comment_id: {
+            type: 'VARCHAR(50)',
+            notNull: true,
+            references: '"comments"',
+            onDelete: 'CASCADE'
+        },
         user_id: {
             type: 'VARCHAR(50)',
             notNull: true,
