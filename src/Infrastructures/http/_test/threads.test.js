@@ -5,6 +5,7 @@ const container = require('../../container');
 const createServer = require('../createServer');
 const AuthenticationTestHelper = require('../../../../tests/AuthenticationTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
+const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
 
 describe('/threads endpoint', () => {
   afterAll(async () => {
@@ -14,6 +15,7 @@ describe('/threads endpoint', () => {
   afterEach(async () => {
     await UsersTableTestHelper.cleanTable();
     await ThreadsTableTestHelper.cleanTable();
+    await CommentsTableTestHelper.cleanTable();
   });
 
 
@@ -136,7 +138,12 @@ describe('/threads endpoint', () => {
       const server = await createServer(container);
       const { accessToken, userId } = await AuthenticationTestHelper.getAccessToken(server);
       await ThreadsTableTestHelper.addThread({ owner: userId });
-      await CommentsTableTestHelper.addComment({ owner: userId });
+      await CommentsTableTestHelper.addComment({ id: 'comment-123', owner: userId });
+      await CommentsTableTestHelper.addComment({ id: 'comment-124', owner: userId, is_delete: true, date: '2025-06-09T12:06:24.541Z' });
+
+      // add reply to comment-123
+      await RepliesTableTestHelper.addReply({ id: 'reply-123', owner: userId});
+      await RepliesTableTestHelper.addReply({ id: 'reply-124', owner: userId, is_delete: true, date: '2025-06-09T12:06:24.541Z' });
 
       // Action
       const response = await server.inject({
@@ -158,7 +165,35 @@ describe('/threads endpoint', () => {
           body: 'This is body',
           date: '2025-06-09T11:06:24.541Z',
           username: 'JohnDoe123',
-          comments: expect.any(Array)
+          comments: [
+            {
+              id: 'comment-123',
+              username: 'JohnDoe123',
+              date: '2025-06-09T11:06:24.541Z',
+              content: 'comment',
+              replies: [
+                {
+                  id: 'reply-123',
+                  content: 'This is reply',
+                  date: '2025-06-09T11:06:24.541Z',
+                  username: 'JohnDoe123'
+                },
+                {
+                  id: 'reply-124',
+                  content: '**balasan telah dihapus**',
+                  date: '2025-06-09T12:06:24.541Z',
+                  username: 'JohnDoe123'
+                },
+              ]
+            },
+            {
+              id: 'comment-124',
+              username: 'JohnDoe123',
+              date: '2025-06-09T12:06:24.541Z',
+              content: '**komentar telah dihapus**',
+              replies: []
+            }
+          ]
         })
       )
 

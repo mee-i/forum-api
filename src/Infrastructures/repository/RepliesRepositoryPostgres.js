@@ -1,10 +1,10 @@
 const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const AuthorizationError = require('../../Commons/exceptions/AuthorizationError');
-const ReplyRepository = require('../../Domains/reply/ReplyRepository');
-const AddedReply = require('../../Domains/reply/entities/AddedReply');
+const RepliesRepository = require('../../Domains/replies/RepliesRepository');
+const AddedReply = require('../../Domains/replies/entities/AddedReply');
 const InvariantError = require('../../Commons/exceptions/InvariantError');
 
-class ReplyRepositoryPostgres extends ReplyRepository {
+class ReplyRepositoryPostgres extends RepliesRepository {
   constructor(pool, idGenerator) {
     super();
     this._pool = pool;
@@ -13,7 +13,7 @@ class ReplyRepositoryPostgres extends ReplyRepository {
 
   async addReply(payload) {
     const { comment_id, content, owner } = payload;
-    const id = `comment-${this._idGenerator()}`;
+    const id = `reply-${this._idGenerator()}`;
 
     const query = {
       text: 'INSERT INTO replies (id, content, comment_id, user_id) VALUES($1, $2, $3, $4) RETURNING id, content, user_id as owner',

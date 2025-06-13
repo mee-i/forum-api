@@ -5,7 +5,6 @@ const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const container = require('../../container');
 const createServer = require('../createServer');
 const AuthenticationTestHelper = require('../../../../tests/AuthenticationTestHelper');
-const { user } = require('pg/lib/defaults.js');
 
 describe('/comments endpoint', () => {
   afterAll(async () => {
@@ -14,6 +13,7 @@ describe('/comments endpoint', () => {
 
   afterEach(async () => {
     await UsersTableTestHelper.cleanTable();
+    await ThreadsTableHelper.cleanTable();
     await CommentsTableHelper.cleanTable();
   });
 
@@ -24,7 +24,7 @@ describe('/comments endpoint', () => {
       // Arrange
       const server = await createServer(container);
 
-      const { accessToken, userId } = await AuthenticationTestHelper.getAccessToken(server);
+      const { accessToken } = await AuthenticationTestHelper.getAccessToken(server);
 
       const requestPayload = {
         content: "This is content"
@@ -44,7 +44,7 @@ describe('/comments endpoint', () => {
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
-      expect(responseJson.message).toEqual('thread tidak ditemukan');
+      expect(responseJson.message).toEqual('Thread tidak ditemukan');
     });
 
     it('should response 401 when request not contain access token', async () => {
@@ -72,7 +72,7 @@ describe('/comments endpoint', () => {
       expect(responseJson.message).toEqual('Missing authentication');
     });
 
-    it('should response 400 when request payload data type not valid', async () => {
+    it('should response 400 when request contain invalid data type', async () => {
       // Arrange
       const requestPayload = {
         content: true,
@@ -154,8 +154,6 @@ describe('/comments endpoint', () => {
 
       // Assert
       const responseJson = JSON.parse(response.payload);
-      // console.warn(response);
-      // console.warn(responseJson);
       expect(response.statusCode).toEqual(404);
       expect(responseJson.status).toEqual('fail');
       expect(responseJson.message).toEqual('Komentar tidak ditemukan');
@@ -168,7 +166,7 @@ describe('/comments endpoint', () => {
       const { accessToken } = await AuthenticationTestHelper.getAccessToken(server);
       const { userId: anotherUser } = await AuthenticationTestHelper.getAccessToken(server, { username: 'JaneDoe', password: "supersecretpassword", fullname: 'Jane Doe' });
 
-      await ThreadsTableHelper.addThread({ owner: anotherUser });
+      await ThreadsTableHelper.addThread({id: 'thread-123', owner: anotherUser });
       await CommentsTableHelper.addComment({ owner: anotherUser });
 
       // Action

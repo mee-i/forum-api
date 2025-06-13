@@ -1,20 +1,16 @@
 const pool = require('../../database/postgres/pool.js');
-const CommentsRepositoryPostgres = require('../CommentsRepositoryPostgres.js');
 const ThreadRepositoryPostgres = require('../ThreadRepositoryPostgres.js');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper.js');
 const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper.js');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper.js');
-const AddedThread = require('../../../Domains/threads/entities/AddedThread.js');
 const AddThread = require('../../../Domains/threads/entities/AddThread.js');
-const DetailThread = require('../../../Domains/threads/entities/DetailThread.js');
 const NotfoundError = require('../../../Commons/exceptions/NotFoundError.js');
-const CommentRepository = require('../../../Domains/comments/CommentRepository.js');
-const CommentRepositoryPostgres = require('../CommentsRepositoryPostgres.js');
+const CommentRepositoryPostgres = require('../CommentRepositoryPostgres.js');
 const AddComment = require('../../../Domains/comments/entities/AddComment.js');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment.js');
 const AuthorizationError = require('../../../Commons/exceptions/AuthorizationError.js');
 
-describe('ThreadRepository postgres', () => {
+describe('CommentRepository postgres', () => {
     afterEach(async () => {
         await ThreadsTableTestHelper.cleanTable();
         await UsersTableTestHelper.cleanTable();
@@ -47,8 +43,7 @@ describe('ThreadRepository postgres', () => {
                 thread_id: addedThread.id,
                 content: "This is comment",
                 owner: addedThread.owner
-            })
-
+            });
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, fakeIdGenerator);
 
             const addedComment = await commentRepositoryPostgres.addComment(addComment);
@@ -59,7 +54,7 @@ describe('ThreadRepository postgres', () => {
                 owner: 'user-123'
             }));
 
-            const comments = await CommentsTableTestHelper.findCommentById('comment-123');
+            const comments = await CommentsTableTestHelper.verifyComment('comment-123', addedThread.id);
             expect(comments).toHaveLength(1);
         });
 
@@ -97,7 +92,7 @@ describe('ThreadRepository postgres', () => {
                 owner: 'user-456'
             }));
 
-            const comments = await CommentsTableTestHelper.findCommentById('comment-456');
+            const comments = await CommentsTableTestHelper.verifyComment('comment-456', addedThread.id);
             expect(comments).toHaveLength(1);
 
         })
@@ -291,7 +286,7 @@ describe('ThreadRepository postgres', () => {
             await commentRepositoryPostgres.deleteCommentById('comment-999');
 
             // Assert
-            const [comment] = await CommentsTableTestHelper.findCommentById('comment-999');
+            const [comment] = await CommentsTableTestHelper.verifyComment('comment-999', 'thread-999');
             expect(comment.is_delete).toBe(true);
         });
     })

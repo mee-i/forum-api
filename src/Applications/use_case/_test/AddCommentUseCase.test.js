@@ -16,7 +16,7 @@ describe('AddCommentUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockThreadRepository = new ThreadRepository();
 
-    mockThreadRepository.verifyThreadById = jest.fn(() =>
+    mockThreadRepository.verifyThread = jest.fn(() =>
       Promise.reject(new NotFoundError('Thread not found')),
     );
 
@@ -34,7 +34,7 @@ describe('AddCommentUseCase', () => {
     // Action
     await expect(addCommentUseCase.execute(useCasePayload)).rejects.toThrowError(NotFoundError);
   })
-  it('should orchestrating the add thread action correctly', async () => {
+  it('should orchestrate the add comment action correctly', async () => {
     // Arrange
     const useCasePayload = {
       thread_id: 'thread-123',
@@ -53,7 +53,7 @@ describe('AddCommentUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockThreadRepository = new ThreadRepository();
 
-    mockThreadRepository.verifyThreadById = jest.fn(() =>
+    mockThreadRepository.verifyThread = jest.fn(() =>
       Promise.resolve(),
     );
 

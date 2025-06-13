@@ -23,19 +23,16 @@ const CommentsTableTestHelper = {
       `,
       values: [id],
     };
-    const result = await this._pool.query(query);
+    const result = await pool.query(query);
     return result.rows;
   },
 
   async verifyComment(id, thread_id) {
     const query = {
-      text: 'SELECT 1 FROM comments WHERE id = $1 AND thread_id = $2',
+      text: 'SELECT * FROM comments WHERE id = $1 AND thread_id = $2',
       values: [id, thread_id]
     }
-    const result = await this._pool.query(query);
-    if (!result.rowCount) {
-      throw new NotFoundError('Komentar tidak ditemukan');
-    }
+    const result = await pool.query(query);
     return result.rows;
   },
 
@@ -45,14 +42,7 @@ const CommentsTableTestHelper = {
       values: [commentId, ownerId],
     };
 
-    const result = await this._pool.query(query);
-
-    if (!result.rowCount) {
-      throw new AuthorizationError(
-        'Anda tidak berhak mengakses resource ini',
-      );
-    }
-
+    const result = await pool.query(query);
     return result.rows;
   },
 
@@ -61,21 +51,7 @@ const CommentsTableTestHelper = {
       text: 'UPDATE comments SET is_delete = true WHERE id = $1 RETURNING id, content, thread_id, user_id',
       values: [id],
     };
-    const result = await this._pool.query(query);
-    if (!result.rowCount) {
-      throw new NotFoundError('Komentar tidak ditemukan');
-    }
-    return result.rows;
-  },
-
-  async findCommentById(id) {
-    const query = {
-      text: 'SELECT * FROM comments WHERE id = $1',
-      values: [id],
-    };
-
     const result = await pool.query(query);
-
     return result.rows;
   },
   

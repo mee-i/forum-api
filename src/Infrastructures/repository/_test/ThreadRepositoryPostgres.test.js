@@ -42,7 +42,7 @@ describe('ThreadRepository postgres', () => {
                 title: 'This is thread',
                 owner: 'user-123'
             }));
-            const threads = await ThreadsTableTestHelper.findThreadById('thread-123');
+            const threads = await ThreadsTableTestHelper.verifyThread('thread-123');
             expect(threads).toHaveLength(1);
         });
 
