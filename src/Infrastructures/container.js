@@ -43,7 +43,6 @@ const DeleteCommentUseCase = require('../Applications/use_case/DeleteCommentUseC
 const AddReplyUseCase = require('../Applications/use_case/AddReplyUseCase');
 const DeleteReplyUseCase = require('../Applications/use_case/DeleteReplyUseCase');
 
-
 // creating container
 const container = createContainer();
 
@@ -116,13 +115,13 @@ container.register([
     parameter: {
       dependencies: [
         {
-          concrete: pool
+          concrete: pool,
         },
         {
-          concrete: nanoid
-        }
-      ]
-    }
+          concrete: nanoid,
+        },
+      ],
+    },
   },
   {
     key: RepliesRepository.name,
@@ -130,14 +129,14 @@ container.register([
     parameter: {
       dependencies: [
         {
-          concrete: pool
+          concrete: pool,
         },
         {
-          concrete: nanoid
-        }
-      ]
-    }
-  }
+          concrete: nanoid,
+        },
+      ],
+    },
+  },
 ]);
 
 // registering use cases
@@ -231,17 +230,17 @@ container.register([
     key: AddCommentUseCase.name,
     Class: AddCommentUseCase,
     parameter: {
-      injectType: "destructuring",
+      injectType: 'destructuring',
       dependencies: [
         {
           name: 'commentRepository',
-          internal: CommentRepository.name
+          internal: CommentRepository.name,
         },
         {
           name: 'threadRepository',
-          internal: ThreadRepository.name
-        }
-      ]
+          internal: ThreadRepository.name,
+        },
+      ],
     },
 
   },
@@ -250,17 +249,17 @@ container.register([
     key: DeleteCommentUseCase.name,
     Class: DeleteCommentUseCase,
     parameter: {
-      injectType: "destructuring",
+      injectType: 'destructuring',
       dependencies: [
         {
           name: 'commentRepository',
-          internal: CommentRepository.name
+          internal: CommentRepository.name,
         },
         {
           name: 'threadRepository',
-          internal: ThreadRepository.name
+          internal: ThreadRepository.name,
         },
-      ]
+      ],
     },
   },
 
@@ -268,63 +267,63 @@ container.register([
     key: GetThreadUseCase.name,
     Class: GetThreadUseCase,
     parameter: {
-      injectType: "destructuring",
+      injectType: 'destructuring',
       dependencies: [
         {
           name: 'threadRepository',
-          internal: ThreadRepository.name
+          internal: ThreadRepository.name,
         },
         {
           name: 'commentRepository',
-          internal: CommentRepository.name
+          internal: CommentRepository.name,
         },
         {
           name: 'repliesRepository',
-          internal: RepliesRepository.name
+          internal: RepliesRepository.name,
         },
-      ]
+      ],
     },
   },
   {
     key: AddReplyUseCase.name,
     Class: AddReplyUseCase,
     parameter: {
-      injectType: "destructuring",
+      injectType: 'destructuring',
       dependencies: [
         {
           name: 'threadRepository',
-          internal: ThreadRepository.name
+          internal: ThreadRepository.name,
         },
         {
           name: 'commentRepository',
-          internal: CommentRepository.name
+          internal: CommentRepository.name,
         },
         {
           name: 'repliesRepository',
-          internal: RepliesRepository.name
-        }
-      ]
+          internal: RepliesRepository.name,
+        },
+      ],
     },
   },
   {
     key: DeleteReplyUseCase.name,
     Class: DeleteReplyUseCase,
     parameter: {
-      injectType: "destructuring",
+      injectType: 'destructuring',
       dependencies: [
         {
           name: 'threadRepository',
-          internal: ThreadRepository.name
+          internal: ThreadRepository.name,
         },
         {
           name: 'commentRepository',
-          internal: CommentRepository.name
+          internal: CommentRepository.name,
         },
         {
           name: 'repliesRepository',
-          internal: RepliesRepository.name
-        }
-      ]
+          internal: RepliesRepository.name,
+        },
+      ],
     },
   },
 ]);

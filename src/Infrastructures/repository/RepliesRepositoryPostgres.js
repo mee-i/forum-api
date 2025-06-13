@@ -51,8 +51,8 @@ class ReplyRepositoryPostgres extends RepliesRepository {
   async verifyReply(id, comment_id) {
     const query = {
       text: 'SELECT 1 FROM replies WHERE id = $1 AND comment_id = $2',
-      values: [id, comment_id]
-    }
+      values: [id, comment_id],
+    };
     const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new NotFoundError('Balasan tidak ditemukan');
@@ -87,7 +87,6 @@ class ReplyRepositoryPostgres extends RepliesRepository {
       throw new InvariantError('Gagal menghapus balasan');
     }
     return result.rows;
-
   }
 }
 

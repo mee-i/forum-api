@@ -51,8 +51,8 @@ class CommentRepositoryPostgres extends CommentRepository {
   async verifyComment(id, thread_id) {
     const query = {
       text: 'SELECT 1 FROM comments WHERE id = $1 AND thread_id = $2',
-      values: [id, thread_id]
-    }
+      values: [id, thread_id],
+    };
     const result = await this._pool.query(query);
     if (!result.rowCount) {
       throw new NotFoundError('Komentar tidak ditemukan');
@@ -87,7 +87,6 @@ class CommentRepositoryPostgres extends CommentRepository {
       throw new InvariantError('Gagal menghapus balasan');
     }
     return result.rows;
-
   }
 }
 

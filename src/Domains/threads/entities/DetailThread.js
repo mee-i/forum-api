@@ -2,7 +2,9 @@ class DetailThread {
   constructor(payload) {
     this._verifyPayload(payload);
 
-    const { id, title, body, date, username } = payload;
+    const {
+      id, title, body, date, username,
+    } = payload;
 
     this.id = id;
     this.title = title;
@@ -11,7 +13,9 @@ class DetailThread {
     this.username = username;
   }
 
-  _verifyPayload({ id, title, body, date, username } ) {
+  _verifyPayload({
+    id, title, body, date, username,
+  }) {
     if (!id || !title || !body || !date || !username) {
       throw new Error('DETAIL_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }

@@ -17,8 +17,6 @@ describe('/comments endpoint', () => {
     await CommentsTableHelper.cleanTable();
   });
 
-
-
   describe('when POST /threads/{threadId}/comments', () => {
     it('should response 404 when thread not found', async () => {
       // Arrange
@@ -27,8 +25,8 @@ describe('/comments endpoint', () => {
       const { accessToken } = await AuthenticationTestHelper.getAccessToken(server);
 
       const requestPayload = {
-        content: "This is content"
-      }
+        content: 'This is content',
+      };
 
       // Action
       const response = await server.inject({
@@ -36,8 +34,8 @@ describe('/comments endpoint', () => {
         url: '/threads/thread-123/comments',
         payload: requestPayload,
         headers: {
-          authorization: `Bearer ${accessToken}`
-        }
+          authorization: `Bearer ${accessToken}`,
+        },
       });
 
       // Assert
@@ -88,8 +86,8 @@ describe('/comments endpoint', () => {
         url: '/threads/thread-123/comments',
         payload: requestPayload,
         headers: {
-          authorization: `Bearer ${accessToken}`
-        }
+          authorization: `Bearer ${accessToken}`,
+        },
       });
 
       // Assert
@@ -102,7 +100,7 @@ describe('/comments endpoint', () => {
     it('should response 201 when given correct payload', async () => {
       // Arrange
       const requestPayload = {
-        content: "This is content"
+        content: 'This is content',
       };
       const server = await createServer(container);
 
@@ -115,8 +113,8 @@ describe('/comments endpoint', () => {
         url: '/threads/thread-123/comments',
         payload: requestPayload,
         headers: {
-          authorization: `Bearer ${accessToken}`
-        }
+          authorization: `Bearer ${accessToken}`,
+        },
       });
 
       // Assert
@@ -129,7 +127,7 @@ describe('/comments endpoint', () => {
           id: expect.any(String),
           content: requestPayload.content,
           owner: userId,
-        })
+        }),
       );
     });
   });
@@ -148,8 +146,8 @@ describe('/comments endpoint', () => {
         method: 'DELETE',
         url: '/threads/thread-123/comments/comment-123',
         headers: {
-          authorization: `Bearer ${accessToken}`
-        }
+          authorization: `Bearer ${accessToken}`,
+        },
       });
 
       // Assert
@@ -164,9 +162,9 @@ describe('/comments endpoint', () => {
       const server = await createServer(container);
 
       const { accessToken } = await AuthenticationTestHelper.getAccessToken(server);
-      const { userId: anotherUser } = await AuthenticationTestHelper.getAccessToken(server, { username: 'JaneDoe', password: "supersecretpassword", fullname: 'Jane Doe' });
+      const { userId: anotherUser } = await AuthenticationTestHelper.getAccessToken(server, { username: 'JaneDoe', password: 'supersecretpassword', fullname: 'Jane Doe' });
 
-      await ThreadsTableHelper.addThread({id: 'thread-123', owner: anotherUser });
+      await ThreadsTableHelper.addThread({ id: 'thread-123', owner: anotherUser });
       await CommentsTableHelper.addComment({ owner: anotherUser });
 
       // Action
@@ -174,8 +172,8 @@ describe('/comments endpoint', () => {
         method: 'DELETE',
         url: '/threads/thread-123/comments/comment-123',
         headers: {
-          authorization: `Bearer ${accessToken}`
-        }
+          authorization: `Bearer ${accessToken}`,
+        },
       });
 
       // Assert
@@ -199,8 +197,8 @@ describe('/comments endpoint', () => {
         method: 'DELETE',
         url: '/threads/thread-123/comments/comment-123',
         headers: {
-          authorization: `Bearer ${accessToken}`
-        }
+          authorization: `Bearer ${accessToken}`,
+        },
       });
 
       // Assert
@@ -208,5 +206,5 @@ describe('/comments endpoint', () => {
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
     });
-  })
+  });
 });

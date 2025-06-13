@@ -9,7 +9,7 @@ class AddedComment {
     this.owner = owner;
   }
 
-  _verifyPayload({ id, content, owner}) {
+  _verifyPayload({ id, content, owner }) {
     if (!id || !content || !owner) {
       throw new Error('ADDED_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY');
     }

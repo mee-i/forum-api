@@ -1,4 +1,3 @@
-
 class AddedReply {
   constructor(payload) {
     this._verifyPayload(payload);

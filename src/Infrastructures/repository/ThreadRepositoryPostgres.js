@@ -29,12 +29,12 @@ class ThreadRepositoryPostgres extends ThreadRepository {
   async verifyThread(id) {
     const query = {
       text: 'SELECT 1 FROM threads WHERE id = $1',
-      values: [id]
+      values: [id],
     };
 
     const result = await this._pool.query(query);
     if (!result.rowCount) {
-      throw new NotFoundError('Thread tidak ditemukan')
+      throw new NotFoundError('Thread tidak ditemukan');
     }
     return result.rows;
   }
@@ -42,11 +42,11 @@ class ThreadRepositoryPostgres extends ThreadRepository {
   async getThreadById(id) {
     const query = {
       text: 'SELECT threads.id, title, body, date, users.username FROM threads JOIN users ON threads.user_id = users.id WHERE threads.id = $1',
-      values: [id]
-    }
+      values: [id],
+    };
     const result = await this._pool.query(query);
     if (!result.rowCount) {
-      throw new NotFoundError('Thread tidak ditemukan');  
+      throw new NotFoundError('Thread tidak ditemukan');
     }
     return new DetailThread({ ...result.rows[0] });
   }

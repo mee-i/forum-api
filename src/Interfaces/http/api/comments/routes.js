@@ -14,7 +14,7 @@ const routes = (handler) => ([
     options: {
       auth: 'forumapi_jwt',
     },
-  }
+  },
 ]);
 
 module.exports = routes;

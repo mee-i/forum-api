@@ -5,7 +5,7 @@ const AuthenticationTestHelper = {
       username: 'JohnDoe123',
       password: 'supersecretpassword',
       fullname: 'John Doe',
-    }
+    },
   ) {
     const registeredUser = await server.inject({
       method: 'POST',

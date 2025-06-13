@@ -7,7 +7,7 @@ class GetThread {
     this.thread_id = thread_id;
   }
 
-  _verifyPayload({ thread_id } ) {
+  _verifyPayload({ thread_id }) {
     if (!thread_id) {
       throw new Error('GET_THREAD.NOT_CONTAIN_NEEDED_PROPERTY');
     }

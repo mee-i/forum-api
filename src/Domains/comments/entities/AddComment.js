@@ -1,4 +1,3 @@
-
 class AddComment {
   constructor(payload) {
     this._verifyPayload(payload);
