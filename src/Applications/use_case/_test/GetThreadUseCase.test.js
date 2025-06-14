@@ -25,12 +25,14 @@ describe('GetThreadUseCase', () => {
       {
         id: 'reply-123',
         content: 'This is a reply',
+        is_delete: false,
         date: '2025-06-09T12:06:24.541Z',
         username: 'JohnDoe123',
       },
       {
         id: 'reply-124',
         content: 'This is a reply',
+        is_delete: true,
         date: '2025-06-09T13:06:24.541Z',
         username: 'JohnDoe123',
       },
@@ -47,8 +49,23 @@ describe('GetThreadUseCase', () => {
       {
         id: 'comment-124',
         content: 'This is content',
-        date: '2025-06-09T11:06:24.541Z',
-        is_delete: false,
+        date: '2025-06-09T12:06:24.541Z',
+        is_delete: true,
+        username: 'JohnDoe123',
+      },
+    ];
+
+    const expectedReplies = [
+      {
+        id: 'reply-123',
+        content: 'This is a reply',
+        date: '2025-06-09T12:06:24.541Z',
+        username: 'JohnDoe123',
+      },
+      {
+        id: 'reply-124',
+        content: '**balasan telah dihapus**',
+        date: '2025-06-09T13:06:24.541Z',
         username: 'JohnDoe123',
       },
     ];
@@ -58,17 +75,15 @@ describe('GetThreadUseCase', () => {
         id: 'comment-123',
         content: 'This is content',
         date: '2025-06-09T11:06:24.541Z',
-        is_delete: false,
         username: 'JohnDoe123',
-        replies: mockReplies,
+        replies: expectedReplies,
       },
       {
         id: 'comment-124',
-        content: 'This is content',
-        date: '2025-06-09T11:06:24.541Z',
-        is_delete: false,
+        content: '**komentar telah dihapus**',
+        date: '2025-06-09T12:06:24.541Z',
         username: 'JohnDoe123',
-        replies: mockReplies,
+        replies: expectedReplies,
       },
     ];
 
@@ -117,5 +132,9 @@ describe('GetThreadUseCase', () => {
     // console.log(mockThreadRepository.addThread.mock.calls);
 
     expect(mockThreadRepository.getThreadById).toBeCalledWith('thread-123');
+    expect(mockCommentRepository.getCommentsByThreadId).toBeCalledWith('thread-123');
+    expect(mockRepliesRepository.getRepliesByCommentId).toBeCalledTimes(2);
+    expect(mockRepliesRepository.getRepliesByCommentId).toHaveBeenNthCalledWith(1, 'comment-123');
+    expect(mockRepliesRepository.getRepliesByCommentId).toHaveBeenNthCalledWith(2, 'comment-124');
   });
 });

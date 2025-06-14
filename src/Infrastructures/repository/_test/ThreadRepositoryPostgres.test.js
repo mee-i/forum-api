@@ -72,6 +72,53 @@ describe('ThreadRepository postgres', () => {
       }));
     });
   });
+
+  describe('verifyThread function', () => {
+    it('should throw error when thread not found', async () => {
+      // Arrange
+      await UsersTableTestHelper.addUser({
+        username: 'dicoding',
+        password: 'supersecretpassword',
+        fullname: 'Dicoding Indonesia',
+      });
+
+      const fakeIdGenerator = () => '123';
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
+
+      // Assert
+      await expect(threadRepositoryPostgres.verifyThread('thread-123')).rejects.toThrowError(NotfoundError);
+    });
+
+    it('should not throw error when thread is found', async () => {
+      await UsersTableTestHelper.addUser({
+        id: 'user-456',
+        username: 'johndoe',
+        password: 'supersecretpassword',
+        fullname: 'John Doe',
+      });
+      const addThread = new AddThread({
+        title: 'Another thread',
+        body: 'Another body',
+        owner: 'user-456',
+      });
+      const fakeIdGenerator = () => '456';
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, fakeIdGenerator);
+
+      // Action
+      const addedThread = await threadRepositoryPostgres.addThread(addThread);
+
+      // Assert
+      expect(addedThread).toStrictEqual(new AddedThread({
+        id: 'thread-456',
+        title: 'Another thread',
+        owner: 'user-456',
+      }));
+      
+      const thread = await threadRepositoryPostgres.verifyThread('thread-456');
+      expect(thread).toHaveLength(1);
+    });
+  });
+  
   describe('getThreadById function', () => {
     it('should throw NotFoundError when thread does not exist', async () => {
       // Arrange

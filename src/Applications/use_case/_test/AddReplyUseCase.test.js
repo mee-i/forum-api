@@ -106,11 +106,14 @@ describe('AddReplyUseCase', () => {
 
     // console.log(mockThreadRepository.addThread.mock.calls);
 
+    expect(mockThreadRepository.verifyThread).toBeCalledWith(useCasePayload.thread_id);
+    expect(mockCommentRepository.verifyComment).toBeCalledWith(useCasePayload.comment_id, useCasePayload.thread_id);
     expect(mockRepliesRepository.addReply).toBeCalledWith(new AddReply({
       thread_id: useCasePayload.thread_id,
       comment_id: useCasePayload.comment_id,
       content: useCasePayload.content,
       owner: useCasePayload.owner,
     }));
+
   });
 });

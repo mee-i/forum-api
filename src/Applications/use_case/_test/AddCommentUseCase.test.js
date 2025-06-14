@@ -29,6 +29,8 @@ describe('AddCommentUseCase', () => {
 
     // Action
     await expect(addCommentUseCase.execute(useCasePayload)).rejects.toThrowError(NotFoundError);
+    expect(mockThreadRepository.verifyThread).toBeCalledWith(useCasePayload.thread_id);
+    expect(mockCommentRepository.addComment).not.toBeCalled();
   });
   it('should orchestrate the add comment action correctly', async () => {
     // Arrange
@@ -49,7 +51,7 @@ describe('AddCommentUseCase', () => {
     const mockCommentRepository = new CommentRepository();
     const mockThreadRepository = new ThreadRepository();
 
-    mockThreadRepository.verifyThread = jest.fn(() => Promise.resolve());
+    mockThreadRepository.verifyThread = jest.fn().mockImplementation(() => Promise.resolve([1]));
 
     mockCommentRepository.addComment = jest.fn().mockImplementation(() => Promise.resolve(
       mockComment,
@@ -72,10 +74,12 @@ describe('AddCommentUseCase', () => {
 
     // console.log(mockThreadRepository.addThread.mock.calls);
 
+    expect(mockThreadRepository.verifyThread).toBeCalledWith(useCasePayload.thread_id);
     expect(mockCommentRepository.addComment).toBeCalledWith(new AddComment({
       thread_id: useCasePayload.thread_id,
       content: useCasePayload.content,
       owner: useCasePayload.owner,
     }));
+
   });
 });

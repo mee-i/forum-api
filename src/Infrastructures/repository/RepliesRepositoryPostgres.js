@@ -20,9 +20,6 @@ class ReplyRepositoryPostgres extends RepliesRepository {
       values: [id, content, comment_id, owner],
     };
     const result = await this._pool.query(query);
-    if (!result.rowCount) {
-      throw new InvariantError('Gagal menambahkan balasan');
-    }
     return new AddedReply({ ...result.rows[0] });
   }
 
@@ -31,11 +28,9 @@ class ReplyRepositoryPostgres extends RepliesRepository {
       text: `
       SELECT 
         replies.id,
-        CASE
-        WHEN replies.is_delete = true THEN '**balasan telah dihapus**'
-        ELSE replies.content
-        END AS content,
+        replies.content,
         replies.date,
+        replies.is_delete,
         users.username
       FROM replies
       JOIN users ON replies.user_id = users.id
@@ -84,7 +79,7 @@ class ReplyRepositoryPostgres extends RepliesRepository {
     };
     const result = await this._pool.query(query);
     if (!result.rowCount) {
-      throw new InvariantError('Gagal menghapus balasan');
+      throw new NotFoundError('Balasan tidak ditemukan');
     }
     return result.rows;
   }

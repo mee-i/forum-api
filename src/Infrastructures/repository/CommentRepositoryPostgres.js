@@ -20,9 +20,6 @@ class CommentRepositoryPostgres extends CommentRepository {
       values: [id, content, thread_id, owner],
     };
     const result = await this._pool.query(query);
-    if (!result.rowCount) {
-      throw new InvariantError('Gagal menambagkan komentar');
-    }
     return new AddedComment({ ...result.rows[0] });
   }
 
@@ -31,10 +28,8 @@ class CommentRepositoryPostgres extends CommentRepository {
       text: `
       SELECT 
         comments.id,
-        CASE
-        WHEN comments.is_delete = true THEN '**komentar telah dihapus**'
-        ELSE comments.content
-        END AS content,
+        comments.content,
+        comments.is_delete,
         comments.date,
         users.username
       FROM comments

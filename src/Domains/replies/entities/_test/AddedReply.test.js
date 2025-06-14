@@ -29,8 +29,7 @@ describe('a AddedReplly entities', () => {
 
     const addReply = new AddedReply(payload);
 
-    expect(addReply.thread_id).toEqual(payload.thread_id);
-    expect(addReply.comment_id).toEqual(payload.comment_id);
+    expect(addReply.id).toEqual(payload.id);
     expect(addReply.content).toEqual(payload.content);
     expect(addReply.owner).toEqual(payload.owner);
   });

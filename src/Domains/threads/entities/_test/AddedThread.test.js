@@ -29,8 +29,8 @@ describe('a AddedThread entities', () => {
 
     const addedThread = new AddedThread(payload);
 
+    expect(addedThread.id).toEqual(payload.id);
     expect(addedThread.title).toEqual(payload.title);
-    expect(addedThread.body).toEqual(payload.body);
     expect(addedThread.owner).toEqual(payload.owner);
   });
 });
