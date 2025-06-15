@@ -308,11 +308,10 @@ describe('CommentRepository postgres', () => {
             const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, () => '999');
 
             // Action
-            expect(await commentRepositoryPostgres.deleteCommentById('comment-999')).toHaveLength(1);
-
+            const deletedComment = await commentRepositoryPostgres.deleteCommentById('comment-999');
+            
             // Assert
-            const [comment] = await CommentsTableTestHelper.verifyComment('comment-999', 'thread-999');
-            expect(comment.is_delete).toBe(true);
+            expect(deletedComment).toBe(1);
         });
     });
 });

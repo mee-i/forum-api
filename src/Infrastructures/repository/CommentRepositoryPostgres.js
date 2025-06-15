@@ -81,7 +81,7 @@ class CommentRepositoryPostgres extends CommentRepository {
     if (!result.rowCount) {
       throw new InvariantError('Gagal menghapus balasan');
     }
-    return result.rows;
+    return result.rowCount;
   }
 }
 
