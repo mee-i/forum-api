@@ -12,11 +12,11 @@ This repository contains the implementation of a RESTful API for a forum applica
 
 - [x] User registration and authentication
 - [x] Add Thread
-- [x] Get Thread by ID // add Replies array
+- [x] Get Thread by ID
 - [x] Add Comment
 - [x] Delete Comment
-- [ ] Add Reply to Comment // lanjut 
-- [ ] Delete Reply
+- [x] Add Reply to Comment
+- [x] Delete Reply
 
 ## Tech Stack
 
