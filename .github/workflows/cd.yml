@@ -19,7 +19,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd ~/forum-api
-          export PATH="/root/.bun/bin:$PATH"
+          export PATH="/root/.bun/bin:$PATH" # karena pm2 nya ada di bun
           export NVM_DIR="$HOME/.nvm"
           source "$NVM_DIR/nvm.sh"
           nvm use node
