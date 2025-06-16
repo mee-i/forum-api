@@ -17,6 +17,8 @@ This repository contains the implementation of a RESTful API for a forum applica
 - [x] Delete Comment
 - [x] Add Reply to Comment
 - [x] Delete Reply
+- [ ] Add like to commment
+- [ ] Delete comment like
 
 ## Tech Stack
 
