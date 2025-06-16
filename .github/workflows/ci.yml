@@ -19,7 +19,7 @@ jobs:
         image: postgres
         env:
          POSTGRES_USER: postgres
-         POSTGRES_PASSWORD: mysecretpassword
+         POSTGRES_PASSWORD: supersecretpassword
          POSTGRES_DB: forumapi_test
          
         options: >-
