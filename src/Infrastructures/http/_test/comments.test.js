@@ -202,9 +202,11 @@ describe('/comments endpoint', () => {
       });
 
       // Assert
+      const thisiskosong = null;
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
+      expect(thisiskosong).toBe(1);
     });
   });
 });
