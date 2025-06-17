@@ -7,7 +7,7 @@ class LikesRepositoryPostgres extends LikesRepository {
     }
 
     async addLike(payload) {
-        const { thread_id, comment_id, owner } = payload;
+        const { comment_id, owner } = payload;
 
         const query = {
             text: 'INSERT INTO likes (comment_id, user_id) VALUES($1, $2) RETURNING comment_id, user_id',
