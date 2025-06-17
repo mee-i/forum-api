@@ -6,6 +6,7 @@ const createServer = require('../createServer');
 const AuthenticationTestHelper = require('../../../../tests/AuthenticationTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const RepliesTableTestHelper = require('../../../../tests/RepliesTableTestHelper');
+const LikesTableTestHelper = require('../../../../tests/LikesTableTestHelper');
 
 describe('/threads endpoint', () => {
   afterAll(async () => {
@@ -135,6 +136,7 @@ describe('/threads endpoint', () => {
       // Arrange
       const server = await createServer(container);
       const { accessToken, userId } = await AuthenticationTestHelper.getAccessToken(server);
+      const { userId: anotherUserId } = await AuthenticationTestHelper.getAccessToken(server, { username: 'JaneDoe', password: 'supersecretpassword', fullname: 'Jane Doe'});
       await ThreadsTableTestHelper.addThread({ owner: userId });
       await CommentsTableTestHelper.addComment({ id: 'comment-123', owner: userId });
       await CommentsTableTestHelper.addComment({
@@ -146,6 +148,10 @@ describe('/threads endpoint', () => {
       await RepliesTableTestHelper.addReply({
         id: 'reply-124', owner: userId, is_delete: true, date: '2025-06-09T12:06:24.541Z',
       });
+
+      // add like to comment-123
+      await LikesTableTestHelper.addLike({comment_id: 'comment-123', owner: userId})
+      await LikesTableTestHelper.addLike({comment_id: 'comment-123', owner: anotherUserId})
 
       // Action
       const response = await server.inject({
@@ -173,6 +179,7 @@ describe('/threads endpoint', () => {
               username: 'JohnDoe123',
               date: '2025-06-09T11:06:24.541Z',
               content: 'comment',
+              likeCount: 2,
               replies: [
                 {
                   id: 'reply-123',
@@ -194,6 +201,7 @@ describe('/threads endpoint', () => {
               date: '2025-06-09T12:06:24.541Z',
               content: '**komentar telah dihapus**',
               replies: [],
+              likeCount: 0
             },
           ],
         }),

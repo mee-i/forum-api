@@ -1,10 +1,11 @@
 const GetThread = require('../../Domains/threads/entities/GetThread');
 
 class GetThreadUseCase {
-  constructor({ threadRepository, commentRepository, repliesRepository }) {
+  constructor({ threadRepository, commentRepository, repliesRepository, likeRepository }) {
     this._threadRepository = threadRepository;
     this._commentRepository = commentRepository;
     this._repliesRepository = repliesRepository;
+    this._likeRepository = likeRepository;
   }
 
   async execute(useCasePayload) {
@@ -14,6 +15,7 @@ class GetThreadUseCase {
     const updatedComments = await Promise.all(
       comments.map(async (comment) => {
         const replies = await this._repliesRepository.getRepliesByCommentId(comment.id);
+        const likeCount = await this._likeRepository.getLikesCountByCommentId(comment.id)
         const updatedReplies = await Promise.all(
             replies.map(async (reply) => {
                 return {
@@ -30,6 +32,7 @@ class GetThreadUseCase {
           date: comment.date,
           username: comment.username,
           replies: updatedReplies,
+          likeCount
         };
       }),
     );
