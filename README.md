@@ -15,10 +15,9 @@ This repository contains the implementation of a RESTful API for a forum applica
 - [x] Get Thread by ID
 - [x] Add Comment
 - [x] Delete Comment
-- [x] Add Reply to Comment
+- [x] Add Reply to Comment 
 - [x] Delete Reply
-- [ ] Add like to commment
-- [ ] Delete comment like
+- [x] Add and Delete like
 
 ## Tech Stack
 
